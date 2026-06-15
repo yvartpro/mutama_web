@@ -373,4 +373,11 @@ body {
     grid-template-columns: 1fr;
   }
 }
+@media (min-width: 861px) {
+  .mobile-drawer,
+  .mobile-drawer-backdrop {
+    display: none !important;
+    pointer-events: none;
+  }
+}
 </style>
