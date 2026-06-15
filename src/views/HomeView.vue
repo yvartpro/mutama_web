@@ -261,4 +261,37 @@ onMounted(loadApartments)
     font-size: clamp(2.5rem, 8vw, 4.25rem);
   }
 }
+
+@media (max-width: 640px) {
+  .hero-section {
+    min-height: 70vh;
+    padding: 0 16px;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    margin-bottom: 14px;
+  }
+  .hero-title {
+    font-size: clamp(2.2rem, 12vw, 3rem);
+    line-height: 1.05;
+  }
+  .hero-copy {
+    margin: 24px auto 32px;
+    max-width: 100%;
+  }
+  .hero-copy p {
+    display: none;
+  }
+  .hero-copy p:first-child {
+    display: inline-flex;
+  }
+  .hero-actions {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .button {
+    width: 100%;
+  }
+}
 </style>
