@@ -37,7 +37,6 @@ function openDetails() {
         <span class="price">{{ formattedPrice }}</span>
       </div>
       <p class="excerpt">{{ apartment.description || 'Un refuge discret avec un service sobre, propre et chaleureux.' }}</p>
-      <div class="tagline">Séjour haut de gamme, design moderne.</div>
     </div>
   </article>
 </template>
@@ -98,15 +97,5 @@ function openDetails() {
   color: #475569;
   line-height: 1.85;
   font-size: 0.95rem;
-}
-.tagline {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: #fff7ed;
-  color: #c2410c;
-  font-weight: 700;
-  font-size: 0.85rem;
 }
 </style>

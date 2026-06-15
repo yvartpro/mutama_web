@@ -113,8 +113,9 @@ watch(
 * {
   box-sizing: border-box;
 }
-body {
+html, body {
   margin: 0;
+  overflow-x: hidden;
 }
 .app-shell {
   min-height: 100vh;
@@ -357,8 +358,12 @@ body {
 }
 @media (max-width: 860px) {
   .app-header-inner {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: none;
   }
   .app-nav {
     display: none;
