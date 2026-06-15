@@ -31,7 +31,7 @@ onMounted(loadApartments)
   <section class="hero-section">
     <div class="hero-background"></div>
     <div class="hero-overlay"></div>
-    <div class="hero-content">
+    <div class="hero-content aos-fade-up" v-aos>
       <span class="hero-eyebrow">Maison de Passage Mutama</span>
       <h1 class="hero-title">Votre Refuge de<br><span> Luxe & Discrétion</span></h1>
       <div class="hero-copy">
@@ -46,7 +46,7 @@ onMounted(loadApartments)
     </div>
   </section>
 
-  <section class="list-section" id="apartments">
+  <section class="list-section aos-fade-up" id="apartments" v-aos>
     <div class="section-header">
       <span class="section-kicker">Appartements</span>
       <h2>Choisissez votre séjour</h2>
@@ -61,7 +61,7 @@ onMounted(loadApartments)
     </div>
   </section>
 
-  <section class="features-section">
+  <section class="features-section aos-fade-up" v-aos>
     <div class="features-panel">
       <div class="features-header">
         <span class="section-kicker">Présentation</span>

@@ -1,5 +1,5 @@
 <template>
-  <section class="reserve-shell">
+  <section class="reserve-shell aos-fade-up" v-aos>
     <div class="content-panel">
       <p class="eyebrow">Réservation</p>
       <h1>Réservez votre séjour en quelques secondes.</h1>

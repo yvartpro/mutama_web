@@ -1,6 +1,6 @@
 <template>
   <div class="app-shell">
-    <header class="app-header">
+    <header class="app-header aos-fade-down" v-aos>
       <div class="app-header-inner">
         <div class="brand">
           <span class="brand-symbol">M</span>
@@ -23,20 +23,28 @@
         <router-link to="/reservation" class="header-cta">Réserver Maintenant</router-link>
       </div>
 
-      <div class="mobile-drawer" :class="{ open: mobileMenuOpen }">
-        <nav>
+      <div class="mobile-drawer-backdrop" :class="{ open: mobileMenuOpen }" @click="closeMenu"></div>
+      <aside class="mobile-drawer" :class="{ open: mobileMenuOpen }">
+        <div class="drawer-header">
+          <div>
+            <p class="drawer-label">Navigation</p>
+            <p class="drawer-subtitle">Mutama</p>
+          </div>
+          <button class="drawer-close" @click="closeMenu" aria-label="Fermer le menu">×</button>
+        </div>
+        <nav class="drawer-nav">
           <router-link to="/" @click="closeMenu">Accueil</router-link>
           <router-link to="/reservation" @click="closeMenu">Réserver</router-link>
           <router-link to="/contact" @click="closeMenu">Contact</router-link>
         </nav>
-      </div>
+      </aside>
     </header>
 
     <main class="app-main">
       <router-view />
     </main>
 
-    <footer class="app-footer">
+    <footer class="app-footer aos-fade-up" v-aos>
       <div class="app-footer-inner">
         <div class="footer-grid">
           <div>
@@ -71,8 +79,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const mobileMenuOpen = ref(false);
 const toggleMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value;
@@ -80,6 +90,17 @@ const toggleMenu = () => {
 const closeMenu = () => {
   mobileMenuOpen.value = false;
 };
+
+watch(mobileMenuOpen, (value) => {
+  document.body.style.overflow = value ? 'hidden' : '';
+});
+
+watch(
+  () => route.fullPath,
+  () => {
+    mobileMenuOpen.value = false;
+  }
+);
 </script>
 
 <style>
@@ -205,26 +226,71 @@ body {
 .mobile-toggle span::after {
   top: 7px;
 }
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 88;
+  background: rgba(15, 23, 42, 0.55);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 220ms ease, visibility 220ms ease;
+}
+.mobile-drawer-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
 .mobile-drawer {
-  display: none;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(320px, 85vw);
+  padding: 32px 24px;
+  background: #ffffff;
+  box-shadow: -24px 0 80px rgba(15, 23, 42, 0.18);
+  z-index: 89;
+  transform: translateX(110%);
+  transition: transform 280ms ease;
+  display: grid;
+  gap: 28px;
 }
 .mobile-drawer.open {
-  display: block;
+  transform: translateX(0);
 }
-.mobile-drawer nav {
+.drawer-header {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 20px 32px 24px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
 }
-.mobile-drawer a {
+.drawer-label {
+  margin: 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #f59e0b;
+}
+.drawer-subtitle {
+  margin: 6px 0 0;
+  font-weight: 700;
+  color: #111827;
+}
+.drawer-close {
+  all: unset;
+  cursor: pointer;
+  font-size: 1.65rem;
+  line-height: 1;
+  color: #111827;
+}
+.drawer-nav {
+  display: grid;
+  gap: 18px;
+}
+.drawer-nav a {
   color: #0f172a;
   text-decoration: none;
   font-weight: 700;
+  font-size: 1.05rem;
 }
 .app-main {
   padding: 0;

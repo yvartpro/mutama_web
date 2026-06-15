@@ -1,5 +1,5 @@
 <template>
-  <section class="contact-shell">
+  <section class="contact-shell aos-fade-up" v-aos>
     <div class="content-panel">
       <p class="eyebrow">Contact</p>
       <h1>Contactez Mutama</h1>

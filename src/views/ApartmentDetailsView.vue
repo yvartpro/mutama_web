@@ -73,7 +73,7 @@ onMounted(loadDetails)
 
 <template>
   <section class="details-shell">
-    <div class="details-top">
+    <div class="details-top aos-fade-up" v-aos>
       <button class="back-button" @click="router.back()">← Retour</button>
       <div>
         <p class="eyebrow">Détails de l’appartement</p>
@@ -85,10 +85,10 @@ onMounted(loadDetails)
     <div v-if="error" class="status-block status-error">{{ error }}</div>
 
     <div v-if="apartment" class="details-grid">
-      <div class="details-card image-panel" :style="{ backgroundImage: coverImage ? `url(${coverImage})` : 'none' }">
+      <div class="details-card image-panel aos-fade-right" v-aos :style="{ backgroundImage: coverImage ? `url(${coverImage})` : 'none' }">
         <div class="image-overlay"></div>
       </div>
-      <div class="details-card info-panel">
+      <div class="details-card info-panel aos-fade-left" v-aos>
         <div class="info-row">
           <span class="label">Prix</span>
           <strong>{{ apartment.price ? `BIF ${apartment.price.toLocaleString('fr-FR')}` : 'Sur demande' }}</strong>

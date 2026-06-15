@@ -26,7 +26,7 @@ function openDetails() {
 </script>
 
 <template>
-  <article class="card" @click="openDetails">
+  <article class="card aos-fade-up" @click="openDetails" v-aos>
     <div class="card-media" :style="cardStyle"></div>
     <div class="card-body">
       <div class="card-header">
