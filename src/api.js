@@ -35,10 +35,16 @@ export async function getPosts() {
 
 export async function getRoomsByApartment(apartmentId) {
   const rooms = await getRooms()
-  return rooms.filter(room => String(room.appartmentId) === String(apartmentId))
+  return rooms.filter(room => {
+    const id = room.appartmentId ?? room.apartmentId
+    return String(id) === String(apartmentId)
+  })
 }
 
 export async function getPostsByApartment(apartmentId) {
   const posts = await getPosts()
-  return posts.filter(post => String(post.appartmentId) === String(apartmentId))
+  return posts.filter(post => {
+    const id = post.appartmentId ?? post.apartmentId
+    return String(id) === String(apartmentId)
+  })
 }

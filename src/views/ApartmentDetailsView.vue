@@ -99,7 +99,6 @@ onMounted(loadDetails)
         </div>
         <p class="details-copy">{{ apartment.description || 'Description non disponible pour ce logement.' }}</p>
         <div class="amenities-block">
-          <h2>Prestations incluses</h2>
           <div class="amenity-grid">
             <div v-for="post in posts" :key="post.id" class="amenity-card">
               <div class="amenity-thumb" :style="{ backgroundImage: `url(${getImageUrl(post) || '/assets/images/hero/background image.jpg'})` }"></div>
@@ -119,12 +118,12 @@ onMounted(loadDetails)
       <div class="gallery-header">
         <div>
           <span class="section-kicker">Galerie</span>
-          <h2>Espaces & équipements en images</h2>
+          <h2>Espaces et équipements associés</h2>
         </div>
-        <p>Visualisez les chambres, espaces communs et prestations disponibles pour cet appartement.</p>
+        <p>Images liées à l’appartement sélectionné : chambres, services et prestations disponibles.</p>
       </div>
 
-      <div v-if="galleryItems.length === 0" class="status-block">Aucune image de galerie disponible.</div>
+      <div v-if="galleryItems.length === 0" class="status-block">Aucune image liée à cet appartement.</div>
       <div v-else class="gallery-grid">
         <button v-for="(item, index) in galleryItems" :key="index" class="gallery-card" @click="openMedia(item)">
           <div class="media-thumb" :style="{ backgroundImage: `url(${item.src})` }"></div>
@@ -182,26 +181,19 @@ onMounted(loadDetails)
 }
 .details-card {
   border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 28px;
+  border-radius: 16px;
   background: #fff;
   padding: 24px;
 }
 .image-panel {
-  min-height: 460px;
+  min-height: 420px;
   background-size: cover;
   background-position: center;
   position: relative;
+  border-radius: 16px;
 }
 .details-tag {
-  position: absolute;
-  top: 24px;
-  left: 24px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(56, 189, 248, 0.12);
-  color: #0c4a6e;
-  font-size: 0.85rem;
-  font-weight: 700;
+  display: none;
 }
 .info-panel h2 {
   margin-top: 32px;
@@ -233,24 +225,24 @@ onMounted(loadDetails)
 }
 .amenity-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
 }
 .amenity-card {
   display: grid;
-  grid-template-columns: 108px 1fr;
-  gap: 16px;
-  padding: 18px;
-  border-radius: 24px;
+  grid-template-columns: 96px 1fr;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 16px;
   background: #f8fafc;
   border: 1px solid rgba(15, 23, 42, 0.08);
   align-items: center;
 }
 .amenity-thumb {
-  min-height: 108px;
+  min-height: 96px;
   background-size: cover;
   background-position: center;
-  border-radius: 22px;
+  border-radius: 14px;
 }
 .amenity-card h3 {
   margin: 0 0 8px;
@@ -297,16 +289,21 @@ onMounted(loadDetails)
   gap: 18px;
 }
 .gallery-card {
-  border-radius: 24px;
+  border-radius: 16px;
   overflow: hidden;
   background: #fff;
   border: 1px solid rgba(15, 23, 42, 0.08);
   cursor: pointer;
   text-align: left;
   padding: 0;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.gallery-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
 }
 .media-thumb {
-  min-height: 180px;
+  min-height: 160px;
   background-size: cover;
   background-position: center;
 }
@@ -361,7 +358,7 @@ onMounted(loadDetails)
   display: inline-flex;
   margin-top: 28px;
   padding: 14px 24px;
-  border-radius: 999px;
+  border-radius: 14px;
   color: #0f172a;
   background: linear-gradient(90deg, #f59e0b, #fb923c);
   text-decoration: none;
