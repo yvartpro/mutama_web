@@ -27,18 +27,19 @@ function openDetails() {
 
 <template>
   <article class="card" @click="openDetails">
-    <div class="card-media" :style="cardStyle">
-      <span class="tag">AI powered</span>
+    <div class="card-media" :style="cardStyle"></div>
+    <div class="card-body">
+      <div class="card-header">
+        <div>
+          <h3>{{ apartment.name }}</h3>
+          <p class="subtitle">Appartement Mutama</p>
+        </div>
+        <span class="price">{{ formattedPrice }}</span>
+      </div>
+      <p class="excerpt">{{ apartment.description || 'Un refuge discret avec un service sobre, propre et chaleureux.' }}</p>
+      <div class="tagline">Séjour haut de gamme, design moderne.</div>
     </div>
-  <div class="card-body">
-    <div class="card-header">
-      <h3>{{ apartment.name }}</h3>
-      <span class="price">{{ formattedPrice }}</span>
-    </div>
-    <p class="excerpt">{{ apartment.description || 'Appartement moderne avec sélection d’équipements et accueil chaleureux.' }}</p>
-    <div class="pill">AI curated comfort</div>
-  </div>
-</article>
+  </article>
 </template>
 
 <style scoped>
@@ -65,18 +66,6 @@ function openDetails() {
   position: relative;
   background-color: #f5f7fa;
 }
-.tag {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(16, 185, 129, 0.12);
-  color: #047857;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
 .card-body {
   padding: 24px;
   display: flex;
@@ -95,23 +84,29 @@ function openDetails() {
   font-weight: 700;
   color: #111827;
 }
+.subtitle {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 0.88rem;
+}
 .price {
   color: #111827;
   font-weight: 700;
 }
 .excerpt {
   margin: 0;
-  color: #4b5563;
-  line-height: 1.75;
+  color: #475569;
+  line-height: 1.85;
   font-size: 0.95rem;
 }
-.pill {
-  align-self: flex-start;
-  padding: 8px 12px;
+.tagline {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
   border-radius: 999px;
-  color: #0f172a;
-  background: #eff6ff;
-  font-size: 0.8rem;
+  background: #fff7ed;
+  color: #c2410c;
   font-weight: 700;
+  font-size: 0.85rem;
 }
 </style>

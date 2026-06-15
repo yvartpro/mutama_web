@@ -10,6 +10,7 @@ const rooms = ref([])
 const posts = ref([])
 const loading = ref(true)
 const error = ref('')
+const selectedMedia = ref(null)
 const phoneNumber = '+257123456789'
 
 const coverImage = computed(() => getImageUrl(apartment.value))
@@ -18,6 +19,39 @@ const whatsappLink = computed(() => {
   const cleaned = phoneNumber.replace(/\D/g, '')
   return `https://wa.me/${cleaned}?text=${encodeURIComponent(whatsappMessage.value)}`
 })
+
+function normalizeImage(value) {
+  if (!value) return null
+  if (typeof value === 'string') return value
+  return value.url || null
+}
+
+function extractGallery(item, label) {
+  const images = []
+  if (Array.isArray(item.images)) {
+    item.images.forEach(img => {
+      const src = normalizeImage(img)
+      if (src) images.push({ src, label })
+    })
+  }
+  if (item.heroImage) {
+    const src = normalizeImage(item.heroImage)
+    if (src) images.push({ src, label })
+  }
+  return images
+}
+
+const roomGallery = computed(() => rooms.value.flatMap(room => extractGallery(room, room.name || 'Pièce')))
+const postGallery = computed(() => posts.value.flatMap(post => extractGallery(post, post.title || 'Prestations')))
+const galleryItems = computed(() => [...roomGallery.value, ...postGallery.value])
+
+function openMedia(item) {
+  selectedMedia.value = item
+}
+
+function closeMedia() {
+  selectedMedia.value = null
+}
 
 async function loadDetails() {
   try {
@@ -43,7 +77,7 @@ onMounted(loadDetails)
       <button class="back-button" @click="router.back()">← Retour</button>
       <div>
         <p class="eyebrow">Détails de l’appartement</p>
-        <h1>{{ apartment?.name || 'Appartement' }}</h1>
+        <h1>{{ apartment?.name || 'Appartement Mutama' }}</h1>
       </div>
     </div>
 
@@ -52,7 +86,7 @@ onMounted(loadDetails)
 
     <div v-if="apartment" class="details-grid">
       <div class="details-card image-panel" :style="{ backgroundImage: coverImage ? `url(${coverImage})` : 'none' }">
-        <div class="details-tag">AI powered</div>
+        <div class="image-overlay"></div>
       </div>
       <div class="details-card info-panel">
         <div class="info-row">
@@ -64,17 +98,46 @@ onMounted(loadDetails)
           <strong>Appartement</strong>
         </div>
         <p class="details-copy">{{ apartment.description || 'Description non disponible pour ce logement.' }}</p>
-        <h2>Services & espaces</h2>
-        <ul class="details-list">
-          <li v-for="room in rooms" :key="room.id">{{ room.name }}</li>
-          <li v-if="rooms.length === 0">Sans informations de pièces supplémentaires.</li>
-        </ul>
-        <h2>Atouts sélectionnés</h2>
-        <ul class="details-list">
-          <li v-for="post in posts.slice(0, 4)" :key="post.id">{{ post.title }}</li>
-          <li v-if="posts.length === 0">Aucun avantage détaillé.</li>
-        </ul>
+        <div class="amenities-block">
+          <h2>Prestations incluses</h2>
+          <div class="amenity-grid">
+            <div v-for="post in posts" :key="post.id" class="amenity-card">
+              <div class="amenity-thumb" :style="{ backgroundImage: `url(${getImageUrl(post) || '/assets/images/hero/background image.jpg'})` }"></div>
+              <div>
+                <h3>{{ post.title || 'Prestations' }}</h3>
+                <p>{{ post.content || 'Aménagements et services pour votre séjour.' }}</p>
+              </div>
+            </div>
+            <div v-if="posts.length === 0" class="amenity-empty">Aucun service détaillé disponible.</div>
+          </div>
+        </div>
         <a :href="whatsappLink" class="button button-primary">Contacter via WhatsApp</a>
+      </div>
+    </div>
+
+    <section class="gallery-section">
+      <div class="gallery-header">
+        <div>
+          <span class="section-kicker">Galerie</span>
+          <h2>Espaces & équipements en images</h2>
+        </div>
+        <p>Visualisez les chambres, espaces communs et prestations disponibles pour cet appartement.</p>
+      </div>
+
+      <div v-if="galleryItems.length === 0" class="status-block">Aucune image de galerie disponible.</div>
+      <div v-else class="gallery-grid">
+        <button v-for="(item, index) in galleryItems" :key="index" class="gallery-card" @click="openMedia(item)">
+          <div class="media-thumb" :style="{ backgroundImage: `url(${item.src})` }"></div>
+          <p>{{ item.label }}</p>
+        </button>
+      </div>
+    </section>
+
+    <div v-if="selectedMedia" class="lightbox" @click.self="closeMedia">
+      <div class="lightbox-content">
+        <button class="lightbox-close" @click="closeMedia">×</button>
+        <img :src="selectedMedia.src" alt="Photo" />
+        <p>{{ selectedMedia.label }}</p>
       </div>
     </div>
   </section>
@@ -165,27 +228,142 @@ onMounted(loadDetails)
   color: #475569;
   line-height: 1.8;
 }
-.details-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 10px;
+.amenities-block {
+  margin-top: 32px;
 }
-.details-list li {
-  padding: 14px 18px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 18px;
+.amenity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.amenity-card {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 24px;
   background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  align-items: center;
+}
+.amenity-thumb {
+  min-height: 108px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 22px;
+}
+.amenity-card h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
   color: #0f172a;
+}
+.amenity-card p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.amenity-empty {
+  grid-column: 1 / -1;
+  padding: 18px;
+  text-align: center;
+  background: #fff4e5;
+  border-radius: 22px;
+  color: #92400e;
+}
+.gallery-section {
+  margin-top: 48px;
+}
+.gallery-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+.gallery-header h2 {
+  margin: 0;
+  font-size: clamp(1.9rem, 2.4vw, 2.5rem);
+  color: #111827;
+}
+.gallery-header p {
+  margin: 0;
+  color: #475569;
+  max-width: 480px;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+.gallery-card {
+  border-radius: 24px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+.media-thumb {
+  min-height: 180px;
+  background-size: cover;
+  background-position: center;
+}
+.gallery-card p {
+  margin: 14px 16px 18px;
+  color: #111827;
+  font-weight: 700;
+}
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 24px;
+}
+.lightbox-content {
+  position: relative;
+  max-width: 960px;
+  width: 100%;
+  background: #111827;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(15, 23, 42, 0.4);
+}
+.lightbox-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: #f8fafc;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.lightbox img {
+  width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  display: block;
+}
+.lightbox-content p {
+  margin: 16px;
+  color: #f8fafc;
+  font-size: 0.95rem;
 }
 .button-primary {
   display: inline-flex;
   margin-top: 28px;
   padding: 14px 24px;
   border-radius: 999px;
-  color: #fff;
-  background: #0f172a;
+  color: #0f172a;
+  background: linear-gradient(90deg, #f59e0b, #fb923c);
   text-decoration: none;
   font-weight: 700;
 }

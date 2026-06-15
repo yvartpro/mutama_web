@@ -7,19 +7,10 @@ const apartments = ref([])
 const loading = ref(true)
 const error = ref('')
 
-const features = [
-  {
-    title: 'Minimalist stay search',
-    description: 'Cartes claires, interface simple et navigation fluide pour trouver rapidement votre appartement.',
-  },
-  {
-    title: 'AI powered recommendations',
-    description: 'Chaque espace est présenté avec un accent “AI powered” pour une expérience moderne et intelligente.',
-  },
-  {
-    title: 'Flat, professional layout',
-    description: 'Un design épuré qui met l’accent sur le contenu et la confiance.',
-  },
+const highlights = [
+  'Un cadre calme, propre et sécurisé pour vos séjours',
+  'Votre tranquillité et discrétion, notre priorité absolue',
+  'Service professionnel de classe mondiale',
 ]
 
 async function loadApartments() {
@@ -38,38 +29,24 @@ onMounted(loadApartments)
 
 <template>
   <section class="hero-section">
-    <div class="page-grid">
-      <div>
-        <p class="eyebrow">Maison de Passage Mutama</p>
-        <h1>Un hébergement premium, simple et moderne.</h1>
-        <p class="hero-copy">Découvrez des appartements sélectionnés avec une présentation claire, des tarifs propres et une expérience utilisateur inspirée par les grandes interfaces.</p>
-        <div class="hero-actions">
-          <router-link to="/reservation" class="button button-primary">Réserver maintenant</router-link>
-          <router-link to="/contact" class="button button-secondary">Contact rapide</router-link>
-        </div>
+    <div class="hero-background"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-eyebrow">Maison de Passage Mutama</span>
+      <h1 class="hero-title">Votre Refuge de<br><span> Luxe & Discrétion</span></h1>
+      <div class="hero-copy">
+        <p>Un cadre calme, propre et sécurisé pour vos séjours</p>
+        <p>Votre tranquillité et discrétion, notre priorité absolue</p>
+        <p>Service professionnel de classe mondiale</p>
       </div>
-      <div class="hero-card">
-        <div class="hero-card-label">AI powered</div>
-        <h2>Cartes intelligentes</h2>
-        <p>Chaque appartement est présenté dans un format épuré, mettant l’accent sur l’information essentielle et la confiance.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="features-section">
-    <div class="section-header">
-      <span class="section-kicker">Design</span>
-      <h2>Un look professionnel et organisé</h2>
-    </div>
-    <div class="feature-grid">
-      <div v-for="feature in features" :key="feature.title" class="feature-card">
-        <p class="feature-title">{{ feature.title }}</p>
-        <p class="feature-copy">{{ feature.description }}</p>
+      <div class="hero-actions">
+        <a href="#apartments" class="button button-primary">Voir nos appartements</a>
+        <router-link to="/reservation" class="button button-secondary">Réserver Maintenant</router-link>
       </div>
     </div>
   </section>
 
-  <section class="list-section">
+  <section class="list-section" id="apartments">
     <div class="section-header">
       <span class="section-kicker">Appartements</span>
       <h2>Choisissez votre séjour</h2>
@@ -83,94 +60,125 @@ onMounted(loadApartments)
       <ApartmentCard v-for="apartment in apartments" :key="apartment.id" :apartment="apartment" />
     </div>
   </section>
+
+  <section class="features-section">
+    <div class="features-panel">
+      <div class="features-header">
+        <span class="section-kicker">Présentation</span>
+        <h2>Un service serein, clair et haut de gamme</h2>
+      </div>
+      <div class="feature-list">
+        <div v-for="(highlight, index) in highlights" :key="index" class="feature-pill">
+          <span class="feature-dot"></span>
+          <p>{{ highlight }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>
 .hero-section {
-  background: #fff;
-  padding: 64px 24px 40px;
-}
-.page-grid {
+  position: relative;
+  min-height: 88vh;
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 32px;
-  max-width: 1200px;
-  margin: 0 auto;
-  align-items: center;
+  place-items: center;
+  overflow: hidden;
+  padding: 0 24px;
 }
-.eyebrow {
-  color: #0f172a;
-  font-weight: 700;
-  letter-spacing: 0.15em;
+.hero-background {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/images/hero/background image.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: saturate(0.95) brightness(0.65);
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15,23,42,0.48), rgba(15,23,42,0.86));
+}
+.hero-content {
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+  text-align: center;
+  color: #f8fafc;
+}
+.hero-eyebrow {
   text-transform: uppercase;
-  font-size: 0.8rem;
-  margin-bottom: 16px;
+  letter-spacing: 0.28em;
+  color: #f5f5f4;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: inline-block;
 }
-.hero-section h1 {
+.hero-title {
   margin: 0;
-  font-size: clamp(2.5rem, 3.5vw, 4.25rem);
-  line-height: 1.02;
-  color: #111827;
+  font-size: clamp(3rem, 5vw, 5.75rem);
+  line-height: 0.95;
+  font-weight: 800;
+}
+.hero-title span {
+  background: linear-gradient(90deg, #f59e0b, #fb923c);
+  -webkit-background-clip: text;
+  color: transparent;
 }
 .hero-copy {
-  max-width: 640px;
-  color: #475569;
-  font-size: 1rem;
-  margin: 24px 0;
+  display: grid;
+  gap: 18px;
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: rgba(248, 250, 252, 0.9);
+  max-width: 740px;
+  margin: 28px auto 40px;
+}
+.hero-copy p {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.hero-copy p::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #fbbf24;
 }
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 16px;
 }
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 24px;
   border-radius: 999px;
   font-weight: 700;
   text-decoration: none;
+  padding: 16px 30px;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 .button-primary {
-  background: #0f172a;
-  color: #fff;
+  background: linear-gradient(90deg, #f59e0b, #fb923c);
+  color: #0f172a;
+  box-shadow: 0 22px 45px rgba(251, 146, 60, 0.23);
 }
 .button-secondary {
-  border: 1px solid rgba(15, 23, 42, 0.16);
-  color: #0f172a;
-  background: #fff;
+  background: rgba(255,255,255,0.08);
+  color: #f8fafc;
+  border: 1px solid rgba(248, 250, 252, 0.25);
 }
-.hero-card {
-  position: relative;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 28px;
-  padding: 32px;
-  background: #f8fafc;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.04);
+.button:hover {
+  transform: translateY(-2px);
 }
-.hero-card-label {
-  display: inline-flex;
-  padding: 8px 16px;
-  border-radius: 999px;
-  color: #0f172a;
-  background: #e0f2fe;
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-.hero-card h2 {
-  margin: 0 0 16px;
-  font-size: 1.75rem;
-  color: #111827;
-}
-.hero-card p {
-  margin: 0;
-  color: #475569;
-  line-height: 1.8;
-}
-.features-section,
-.list-section {
+
+.list-section,
+.features-section {
   padding: 64px 24px;
   max-width: 1200px;
   margin: 0 auto;
@@ -180,44 +188,59 @@ onMounted(loadApartments)
 }
 .section-kicker {
   display: block;
-  color: #0f172a;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  color: #f59e0b;
+  font-weight: 800;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   margin-bottom: 12px;
 }
 .section-header h2 {
   margin: 0;
-  font-size: 2.25rem;
+  font-size: clamp(2.15rem, 2.7vw, 3rem);
   color: #111827;
 }
-.feature-grid {
+.feature-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  gap: 16px;
 }
-.feature-card {
+.features-panel {
   background: #fff;
   border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 24px;
-  padding: 28px;
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.06);
 }
-.feature-title {
-  margin: 0 0 14px;
-  font-weight: 700;
-  font-size: 1rem;
+.features-header h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.8rem);
   color: #111827;
 }
-.feature-copy {
+.feature-pill {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 20px 22px;
+  border-radius: 24px;
+  background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+.feature-dot {
+  min-width: 14px;
+  min-height: 14px;
+  border-radius: 999px;
+  background: #f59e0b;
+  margin-top: 6px;
+}
+.feature-pill p {
   margin: 0;
-  color: #475569;
-  line-height: 1.75;
+  color: #334155;
+  line-height: 1.8;
 }
 .card-grid {
   display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 .status-block {
   color: #475569;
@@ -231,11 +254,11 @@ onMounted(loadApartments)
 }
 
 @media (max-width: 960px) {
-  .page-grid {
-    grid-template-columns: 1fr;
+  .hero-section {
+    min-height: 80vh;
   }
-  .feature-grid {
-    grid-template-columns: 1fr;
+  .hero-title {
+    font-size: clamp(2.5rem, 8vw, 4.25rem);
   }
 }
 </style>
