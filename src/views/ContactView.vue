@@ -8,7 +8,7 @@
       <div class="contact-grid">
         <div class="contact-box">
           <h2>Téléphone</h2>
-          <p>+257 123 456 789</p>
+          <p>{{ phoneNumber }}</p>
         </div>
         <div class="contact-box">
           <h2>Email</h2>
@@ -22,6 +22,10 @@
     </div>
   </section>
 </template>
+
+<script setup>
+const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '+257 123 456 789'
+</script>
 
 <style scoped>
 .contact-shell {

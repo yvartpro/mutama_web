@@ -11,7 +11,7 @@ const posts = ref([])
 const loading = ref(true)
 const error = ref('')
 const selectedMedia = ref(null)
-const phoneNumber = '+257123456789'
+const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '+257123456789'
 
 const coverImage = computed(() => getImageUrl(apartment.value))
 const whatsappMessage = computed(() => `Bonjour, je souhaite réserver l'appartement "${apartment.value?.name || ''}".`)
@@ -53,6 +53,13 @@ function closeMedia() {
   selectedMedia.value = null
 }
 
+function formatUSD(value){
+  if (value == null) return ''
+  const n = Number(value)
+  if (Number.isNaN(n)) return String(value)
+  return `$ ${n.toLocaleString('en-US', {minimumFractionDigits:0,maximumFractionDigits:0})}`
+}
+
 async function loadDetails() {
   try {
     loading.value = true
@@ -89,10 +96,10 @@ onMounted(loadDetails)
         <div class="image-overlay"></div>
       </div>
       <div class="details-card info-panel aos-fade-left" v-aos>
-        <div class="info-row">
-          <span class="label">Prix</span>
-          <strong>{{ apartment.price ? `BIF ${apartment.price.toLocaleString('fr-FR')}` : 'Sur demande' }}</strong>
-        </div>
+            <div class="info-row">
+              <span class="label">Prix</span>
+              <strong>{{ apartment.price ? formatUSD(apartment.price) : 'Sur demande' }}</strong>
+            </div>
         <div class="info-row">
           <span class="label">Catégorie</span>
           <strong>Appartement</strong>
@@ -124,8 +131,9 @@ onMounted(loadDetails)
       </div>
 
       <div v-if="galleryItems.length === 0" class="status-block">Aucune image liée à cet appartement.</div>
-      <div v-else class="gallery-grid">
-        <button v-for="(item, index) in galleryItems" :key="index" class="gallery-card" @click="openMedia(item)">
+        <div v-else class="gallery-grid">
+        <button v-for="(item, index) in galleryItems" :key="index" class="gallery-card" @click.stop.prevent=""> 
+          <!-- Image preview disabled on mobile; clicking does nothing -->
           <div class="media-thumb" :style="{ backgroundImage: `url(${item.src})` }"></div>
           <p>{{ item.label }}</p>
         </button>

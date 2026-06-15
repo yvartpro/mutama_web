@@ -28,9 +28,9 @@
 </template>
 
 <script setup>
-const phoneNumber = '+257123456789'
+const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '+257123456789'
 const whatsappMessage = 'Bonjour, je souhaite réserver un appartement à Mutama.'
-const whatsappLink = `https://wa.me/${phoneNumber.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`
+const whatsappLink = `https://wa.me/${(phoneNumber||'').replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`
 </script>
 
 <style scoped>

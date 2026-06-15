@@ -17,7 +17,10 @@ const cardStyle = computed(() => ({
 }))
 const formattedPrice = computed(() => {
   const price = props.apartment?.price
-  return price ? `BIF ${price.toLocaleString('fr-FR')}` : 'Tarif sur demande'
+  if (!price) return 'Tarif sur demande'
+  const n = Number(price)
+  if (Number.isNaN(n)) return String(price)
+  return `$ ${n.toLocaleString('en-US', {minimumFractionDigits:0,maximumFractionDigits:0})}`
 })
 
 function openDetails() {

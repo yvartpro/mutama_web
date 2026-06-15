@@ -227,10 +227,10 @@ html, body {
 .mobile-toggle span::after {
   top: 7px;
 }
-.mobile-drawer-backdrop {
+  .mobile-drawer-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 88;
+  z-index: 1002; /* placed above banner and other content */
   background: rgba(15, 23, 42, 0.55);
   opacity: 0;
   visibility: hidden;
@@ -249,7 +249,7 @@ html, body {
   padding: 32px 24px;
   background: #ffffff;
   box-shadow: -24px 0 80px rgba(15, 23, 42, 0.18);
-  z-index: 89;
+  z-index: 1003;
   transform: translateX(110%);
   transition: transform 280ms ease;
   display: grid;
